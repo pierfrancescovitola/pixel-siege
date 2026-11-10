@@ -13,6 +13,16 @@ Open `index.html` in any modern browser. No build step or install needed.
 | Click / hold | Shoot |
 | P / Esc | Pause |
 
+**Phones and tablets** (play in landscape):
+
+| Control | Action |
+|---|---|
+| Left thumb, anywhere on the left half | Move (floating joystick) |
+| Right thumb, anywhere on the right half | Aim; push past the center to shoot |
+| II button, top right | Pause |
+
+On iPhone/iPad, "Add to Home Screen" in Safari runs it full screen.
+
 ## Features
 
 - 5 levels with waves of enemies spawning from every edge, plus a boss fight

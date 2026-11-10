@@ -18,6 +18,8 @@ Pixel Siege: a retro top-down pixel shooter. The whole game is one file, `index.
   & "C:\Program Files\Google\Chrome\Application\chrome.exe" --headless=new --disable-gpu --user-data-dir="$env:TEMP\ps-headless\profile" --enable-logging=stderr --v=0 --virtual-time-budget=4000 --screenshot="$env:TEMP\ps-headless\shot.png" --window-size=960,540 "file:///C:/Users/franc/OneDrive/Desktop/Claude%20test/shooter/index.html" 2>&1 | Select-String "CONSOLE|Uncaught"
   ```
 
+- **Testing touch headless:** under `--virtual-time-budget`, headless Chrome runs only about 3 `requestAnimationFrame` callbacks, so the game loop barely advances. In a scratch copy of the page, prepend `<script>window.requestAnimationFrame = cb => setTimeout(() => cb(performance.now()), 16);</script>`, then dispatch `new PointerEvent(type, { pointerType: 'touch', pointerId, clientX, clientY, bubbles: true })` on the canvas from `setTimeout`s and take the screenshot.
+
 ## Git workflow (required, every session)
 
 Commit to Git and push to GitHub regularly as you work, so no work or progress is ever lost. The user relies on this history to see where the project stands and to revert changes.
@@ -44,5 +46,6 @@ Commit to Git and push to GitHub regularly as you work, so no work or progress i
 - **Fixed internal resolution:** the game always draws at 480×270, and CSS scales the canvas up with `image-rendering: pixelated`. Mouse positions are converted to game coordinates in `toGame()`. All positions are in game pixels.
 - **Menus are drawn on the canvas:** `buildButtons()` returns the buttons for the current state each frame. `handleButtons()` handles mouse hit-testing, and `onPress()` handles the keyboard (Up/Down/Enter). Clicks are ignored for a short time after a state change (`activate()`), so a held click doesn't carry over into the next screen.
 - **Loop:** `requestAnimationFrame` with `dt` limited to `[0, 0.05]`. The lower limit matters, because the first frame's timestamp can come before the script's start time. A negative `dt` once crashed the menu on its first frame.
+- **Touch input (INPUT section):** `touch.on` switches the UI to touch mode (first touch turns it on, a mouse click turns it off). While playing, touch pointers go to two floating sticks, `touch.L` / `touch.R`, chosen by screen half and tracked by `pointerId`, in CSS pixels. `stickVec()` returns the deflection (0..1, dead zone removed). `updatePlayer()` uses the left stick when no keys are held; in touch mode the right stick sets `p.aim` and fires. In other states a tap acts as a click. The sticks are DOM elements (`#sticks`) updated in `drawSticks()`; the pause button `PAUSE_BTN` is drawn on the canvas. A CSS-only `#rotate` overlay covers the game in portrait on touch devices.
 - **Persistence:** `localStorage` key `pixel-siege-save` stores `{unlocked, best, muted}`. Every access is wrapped in try/catch.
 - **Audio:** `SFX.*` functions synthesize sounds with Web Audio (`tone()`, `noise()`). The audio context is created on the first click or key press.
