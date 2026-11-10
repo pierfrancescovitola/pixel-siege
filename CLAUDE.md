@@ -18,9 +18,16 @@ Pixel Siege: a retro top-down pixel shooter. The whole game is one file, `index.
   & "C:\Program Files\Google\Chrome\Application\chrome.exe" --headless=new --disable-gpu --user-data-dir="$env:TEMP\ps-headless\profile" --enable-logging=stderr --v=0 --virtual-time-budget=4000 --screenshot="$env:TEMP\ps-headless\shot.png" --window-size=960,540 "file:///C:/Users/franc/OneDrive/Desktop/Claude%20test/shooter/index.html" 2>&1 | Select-String "CONSOLE|Uncaught"
   ```
 
-## Git workflow (user requirement)
+## Git workflow (required, every session)
 
-After every completed change: commit with a clean, descriptive message (a subject line plus a short body), then `git push` to the private repo `pierfrancescovitola-jpg/pixel-siege` on branch `main`. The user relies on this history to revert changes. The commit identity is set at repo level to the GitHub no-reply address, so leave it as is.
+Commit to Git and push to GitHub regularly as you work, so no work or progress is ever lost. The user relies on this history to see where the project stands and to revert changes.
+
+- **Commit as you go**, not only at the end of a task. Make a commit each time a logical piece of work is done and checked: a feature, a fix, a balance change, a docs update. A larger task should become several small commits.
+- **Push right after each commit:** `git push` to the private repo `pierfrancescovitola-jpg/pixel-siege` (remote `origin`, branch `main`). Don't leave commits that exist only on this machine.
+- **Clean commit messages:** a subject line in the imperative mood of 72 characters or less (for example "Add shotgun weapon tier"), a blank line, then a short body saying what changed and why. End with the `Co-Authored-By` trailer. One topic per commit. Don't commit broken code: run the syntax check (and the runtime check for gameplay changes) first.
+- **Before you start work**, run `git status` and commit or ask about any leftover changes, so each commit stays focused.
+- **Don't rewrite pushed history:** no `--force`, `reset --hard` or amending pushed commits unless the user asks. To undo something, use `git revert`.
+- **Commit identity** is set at repo level to the user's GitHub no-reply address. Leave it as is.
 
 ## Architecture
 
